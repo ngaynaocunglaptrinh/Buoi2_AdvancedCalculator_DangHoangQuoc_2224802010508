@@ -1,0 +1,46 @@
+name: buoi2danghoangquoc
+description: "Advanced Mobile Calculator Project for Lab 3."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # --- CÁC THƯ VIỆN BỔ SUNG THEO YÊU CẦU LAB 3 ---
+  # Quản lý trạng thái ứng dụng [cite: 38, 50]
+  provider: ^6.1.1
+  # Lưu trữ dữ liệu bền vững (lịch sử, cài đặt) [cite: 37, 51]
+  shared_preferences: ^2.2.2
+  # Phân tích cú pháp và tính toán biểu thức toán học [cite: 36, 52]
+  math_expressions: ^2.4.0
+  # Định dạng ngày tháng và số [cite: 53]
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+  # --- THƯ VIỆN KIỂM THỬ BỔ SUNG ---
+  # Hỗ trợ tạo mock object cho Unit Test [cite: 57]
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+
+  # Cấu hình Font Roboto theo yêu cầu thiết kế (Step 3) [cite: 30]
+  # Lưu ý: Bạn cần tạo thư mục assets/fonts/ và bỏ file font vào đó
+#  fonts:
+#    - family: Roboto
+#      fonts:
+#        - asset: assets/fonts/Roboto-Regular.ttf
+#        - asset: assets/fonts/Roboto-Medium.ttf
+#          weight: 500
+#        - asset: assets/fonts/Roboto-Light.ttf
+#          weight: 300
