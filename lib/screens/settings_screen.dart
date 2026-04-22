@@ -10,6 +10,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Lấy các provider để điều khiển dữ liệu
     final themeProvider = Provider.of<ThemeProvider>(context);
     final calcProvider = Provider.of<CalculatorProvider>(context);
     final historyProvider = Provider.of<HistoryProvider>(context, listen: false);
@@ -31,22 +32,36 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
           ),
+          const Divider(),
           ListTile(
             title: const Text('Decimal Precision'),
             subtitle: Slider(
               value: calcProvider.precision.toDouble(),
-              min: 2, max: 10, divisions: 8,
+              min: 2,
+              max: 10,
+              divisions: 8,
+              label: calcProvider.precision.toString(),
               onChanged: (val) => calcProvider.updatePrecision(val.toInt()),
             ),
           ),
+          const Divider(),
           SwitchListTile(
             title: const Text('Use Radians'),
             value: calcProvider.angleMode == AngleMode.radians,
-            onChanged: (val) => calcProvider.toggleAngleMode(val ? AngleMode.radians : AngleMode.degrees),
+            onChanged: (val) => calcProvider.toggleAngleMode(
+                val ? AngleMode.radians : AngleMode.degrees
+            ),
           ),
+          const SizedBox(height: 30),
+
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () => historyProvider.clearHistory(),
+            onPressed: () {
+              historyProvider.clearHistory();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('History cleared')),
+              );
+            },
             child: const Text('Clear All History', style: TextStyle(color: Colors.white)),
           ),
         ],

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'providers/calculator_provider.dart';
-import 'providers/theme_provider.dart';
-import 'providers/history_provider.dart';
-import 'screens/calculator_screen.dart';
+import 'package:buoi2danghoangquoc/providers/calculator_provider.dart';
+import 'package:buoi2danghoangquoc/providers/theme_provider.dart';
+import 'package:buoi2danghoangquoc/providers/history_provider.dart';
+import 'package:buoi2danghoangquoc/screens/calculator_screen.dart';
 
 void main() {
   runApp(
@@ -25,9 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-
     return MaterialApp(
-      title: 'Advanced Calculator',
       debugShowCheckedModeBanner: false,
       theme: themeProvider.lightTheme,
       darkTheme: themeProvider.darkTheme,

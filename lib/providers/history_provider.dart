@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/calculation_history.dart';
-import '../services/storage_service.dart';
+import 'package:buoi2danghoangquoc/models/calculation_history.dart';
+import 'package:buoi2danghoangquoc/services/storage_service.dart';
 
 class HistoryProvider extends ChangeNotifier {
   List<CalculationHistory> _history = [];
@@ -18,8 +18,12 @@ class HistoryProvider extends ChangeNotifier {
   }
 
   Future<void> addRecord(String exp, String res) async {
-    _history.insert(0, CalculationHistory(expression: exp, result: res, timestamp: DateTime.now()));
-    if (_history.length > 50) _history = _history.sublist(0, 50);
+    _history.insert(0, CalculationHistory(
+        expression: exp,
+        result: res,
+        timestamp: DateTime.now()
+    ));
+    if (_history.length > 50) _history.removeLast();
     await _storage.saveHistory(_history);
     notifyListeners();
   }
