@@ -15,83 +15,51 @@ class ButtonGrid extends StatelessWidget {
     final hp = Provider.of<HistoryProvider>(context, listen: false);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    final List<String> basicKeys = ['C', '(', ')', '÷', '7', '8', '9', '×', '4', '5', '6', '-', '1', '2', '3', '+', '±', '0', '.', '='];
+    final List<String> sciKeys = ['sin', 'cos', 'tan', '√', 'π', 'MC', 'MR', 'M+', 'M-', '÷', '7', '8', '9', '×', '(', '4', '5', '6', '-', ')', '1', '2', '3', '+', 'x²', 'C', '0', '.', '=', 'CE'];
+    final List<String> progKeys = ['HEX', 'DEC', 'BIN', 'OCT', 'AND', 'OR', 'XOR', 'NOT', 'A', 'B', 'C', '÷', 'D', 'E', 'F', '×', '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '=', 'CE', '0', '<<', '±'];
 
-    final List<String> basicKeys = [
-      'C', '(', ')', '÷',
-      '7', '8', '9', '×',
-      '4', '5', '6', '-',
-      '1', '2', '3', '+',
-      '±', '0', '.', '='
-    ];
-
-    final List<String> sciKeys = [
-      'sin', 'cos', 'tan', '√', 'π',
-      'MC', 'MR', 'M+', 'M-', '÷',
-      '7', '8', '9', '×', '(',
-      '4', '5', '6', '-', ')',
-      '1', '2', '3', '+', 'x²',
-      'C', '0', '.', '=', 'CE'
-    ];
-
-    final List<String> progKeys = [
-      'HEX', 'DEC', 'BIN', 'OCT',
-      'AND', 'OR', 'XOR', 'NOT',
-      'A', 'B', 'C', '÷',
-      'D', 'E', 'F', '×',
-      '7', '8', '9', '-',
-      '4', '5', '6', '+',
-      '1', '2', '3', '=',
-      'CE', '0', '<<', '±'
-    ];
-
-
-    List<String> currentKeys;
+    List<String> keys;
     int columns;
-    double aspectRatio;
+    double ratio;
 
     if (cp.mode == CalculatorMode.scientific) {
-      currentKeys = sciKeys;
-      columns = 5;
-      aspectRatio = 1.3;
+      keys = sciKeys;
+      columns = 6;
+      ratio = 1.1;
     } else if (cp.mode == CalculatorMode.programmer) {
-      currentKeys = progKeys;
+      keys = progKeys;
       columns = 4;
-      aspectRatio = 1.4;
+      ratio = 1.4;
     } else {
-      currentKeys = basicKeys;
+      keys = basicKeys;
       columns = 4;
-      aspectRatio = 1.1;
+      ratio = 1.1;
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
-          childAspectRatio: aspectRatio,
+          childAspectRatio: ratio,
         ),
-        itemCount: currentKeys.length,
+        itemCount: keys.length,
         itemBuilder: (context, i) {
-          final label = currentKeys[i];
-
-
+          final label = keys[i];
           Color? btnColor;
           Color txtColor = isDark ? Colors.white : Colors.black;
 
           if (label == '=') {
-            btnColor = AppColors.btnOperatorLight;
+            btnColor = isDark ? AppColors.accentDark : AppColors.accentLight;
             txtColor = Colors.white;
-          } else if (['+', '-', '×', '÷', 'AND', 'OR', 'XOR', 'NOT', '<<'].contains(label)) {
-            btnColor = isDark
-                ? AppColors.btnOperatorDark.withOpacity(0.2)
-                : AppColors.btnOperatorLight.withOpacity(0.1);
-            txtColor = AppColors.btnOperatorLight;
-          } else if (['C', 'CE', 'MC', 'MR', 'M+', 'M-', 'HEX', 'DEC', 'BIN', 'OCT'].contains(label)) {
-            btnColor = isDark ? AppColors.btnFunctionDark : AppColors.btnFunctionLight;
+          } else if (['+', '-', '×', '÷'].contains(label)) {
+            txtColor = isDark ? AppColors.accentDark : AppColors.accentLight;
+          } else if (['C', 'CE', 'MC', 'MR', 'M+', 'M-'].contains(label)) {
+            btnColor = isDark ? AppColors.secondaryDark : Color(0xFFD2D3DA);
           }
 
           return CalculatorButton(
@@ -99,16 +67,13 @@ class ButtonGrid extends StatelessWidget {
             color: btnColor,
             textColor: txtColor,
             onPressed: () {
-
               if (label == '=') {
                 cp.calculate();
-                if (cp.result != "Error") {
-                  hp.addRecord(cp.expression, cp.result);
-                }
+                if (cp.result != "Error") hp.addRecord(cp.expression, cp.result);
               } else if (label == 'C' || label == 'CE') {
                 cp.clear();
-              } else if (label == '±') {
-                cp.addToExpression('-');
+              } else if (['BIN', 'HEX', 'OCT', 'DEC'].contains(label)) {
+                cp.convertBase(label);
               } else if (label == 'M+') {
                 cp.memoryAdd();
               } else if (label == 'M-') {
@@ -119,6 +84,8 @@ class ButtonGrid extends StatelessWidget {
                 cp.memoryClear();
               } else if (label == '<<') {
                 cp.deleteLast();
+              } else if (['sin', 'cos', 'tan', '√'].contains(label)) {
+                cp.addToExpression('$label(');
               } else {
                 cp.addToExpression(label);
               }

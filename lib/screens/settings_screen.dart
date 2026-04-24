@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart';
 import '../providers/calculator_provider.dart';
-import '../providers/history_provider.dart';
+import '../providers/theme_provider.dart';
 import '../models/calculator_mode.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -10,10 +9,8 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lấy các provider để điều khiển dữ liệu
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final calcProvider = Provider.of<CalculatorProvider>(context);
-    final historyProvider = Provider.of<HistoryProvider>(context, listen: false);
+    final cp = Provider.of<CalculatorProvider>(context);
+    final tp = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -23,8 +20,8 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             title: const Text('Theme Mode'),
             trailing: DropdownButton<ThemeMode>(
-              value: themeProvider.themeMode,
-              onChanged: (mode) => themeProvider.setTheme(mode!),
+              value: tp.themeMode,
+              onChanged: (mode) => tp.setTheme(mode!),
               items: const [
                 DropdownMenuItem(value: ThemeMode.light, child: Text('Light')),
                 DropdownMenuItem(value: ThemeMode.dark, child: Text('Dark')),
@@ -32,37 +29,25 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(),
           ListTile(
             title: const Text('Decimal Precision'),
             subtitle: Slider(
-              value: calcProvider.precision.toDouble(),
-              min: 2,
+              value: cp.precision.toDouble(),
+              min: 0,
               max: 10,
-              divisions: 8,
-              label: calcProvider.precision.toString(),
-              onChanged: (val) => calcProvider.updatePrecision(val.toInt()),
+              divisions: 10,
+              label: cp.precision.toString(),
+              onChanged: (val) => cp.updatePrecision(val.toInt()),
             ),
+            trailing: Text(cp.precision.toString()),
           ),
-          const Divider(),
-          SwitchListTile(
-            title: const Text('Use Radians'),
-            value: calcProvider.angleMode == AngleMode.radians,
-            onChanged: (val) => calcProvider.toggleAngleMode(
-                val ? AngleMode.radians : AngleMode.degrees
+          ListTile(
+            title: const Text('Angle Mode'),
+            trailing: ToggleButtons(
+              isSelected: [cp.angleMode == AngleMode.degrees, cp.angleMode == AngleMode.radians],
+              onPressed: (index) => cp.toggleAngleMode(index == 0 ? AngleMode.degrees : AngleMode.radians),
+              children: const [Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('DEG')), Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('RAD'))],
             ),
-          ),
-          const SizedBox(height: 30),
-
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () {
-              historyProvider.clearHistory();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('History cleared')),
-              );
-            },
-            child: const Text('Clear All History', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

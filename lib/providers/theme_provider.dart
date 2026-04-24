@@ -4,24 +4,29 @@ import 'package:buoi2danghoangquoc/utils/constants.dart';
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
-
   ThemeData get lightTheme => ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.bgLight,
-    cardColor: AppColors.btnNumberLight,
+    primaryColor: AppColors.primaryLight,
+    cardColor: Colors.white,
+    fontFamily: 'Roboto',
     colorScheme: const ColorScheme.light(
-      primary: AppColors.btnOperatorLight,
-      secondary: AppColors.btnOperatorLight,
+      primary: AppColors.primaryLight,
+      secondary: AppColors.secondaryLight,
+      surface: AppColors.accentLight,
     ),
   );
 
   ThemeData get darkTheme => ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.bgDark,
-    cardColor: AppColors.btnNumberDark,
+    primaryColor: AppColors.primaryDark,
+    cardColor: AppColors.secondaryDark,
+    fontFamily: 'Roboto',
     colorScheme: const ColorScheme.dark(
-      primary: AppColors.btnOperatorDark,
-      secondary: AppColors.btnOperatorDark,
+      primary: AppColors.primaryDark,
+      secondary: AppColors.secondaryDark,
+      surface: AppColors.accentDark,
     ),
   );
 

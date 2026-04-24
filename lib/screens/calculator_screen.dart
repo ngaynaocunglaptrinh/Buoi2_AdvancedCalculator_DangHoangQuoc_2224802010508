@@ -27,11 +27,11 @@ class CalculatorScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Column(
-          children: [
-            const ModeSelector(), // Chọn chế độ
-            const Expanded(flex: 3, child: DisplayArea()),
-            const Divider(height: 1, color: Colors.grey),
-            const Expanded(flex: 7, child: ButtonGrid()),
+          children: const [
+            ModeSelector(),
+            Expanded(flex: 4, child: DisplayArea()),
+            Divider(height: 1, color: Colors.grey),
+            Expanded(flex: 6, child: ButtonGrid()),
           ],
         ),
       ),

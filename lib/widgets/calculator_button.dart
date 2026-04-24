@@ -17,7 +17,7 @@ class CalculatorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(6), // Khoảng cách giữa các nút
+      margin: const EdgeInsets.all(6),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color ?? Theme.of(context).cardColor,
